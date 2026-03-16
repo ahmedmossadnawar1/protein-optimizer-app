@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PlantProtein AI — Graduation Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#ffffff;--sf:#f0f4f8;--sf2:#e2e8f0;--bd:#cbd5e1;--ac:#1e3a8a;--ac2:#1d4ed8;--ad:rgba(30,58,138,0.08);--am:#b45309;--bl:#1e40af;--pu:#4f46e5;--tx:#0f172a;--dm:#334155;--mt:#64748b;--r:14px;--rs:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;font-size:16px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:54px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;color:var(--ac)}
+.logo span{color:var(--dm);font-weight:600}
+.nl{display:flex;gap:20px}
+.nl a{color:var(--dm);text-decoration:none;font-size:.8rem;font-weight:500;cursor:pointer;transition:color .15s}
+.nl a:hover{color:var(--ac)}
+.ss{display:flex;align-items:center;gap:7px;font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700}
+.dot{width:7px;height:7px;border-radius:50%;background:#ef4444}
+.dot.on{background:var(--ac)}
+.hero{padding:80px 28px 44px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(30,58,138,.06) 0%,transparent 70%)}
+.htag{display:inline-flex;align-items:center;gap:7px;background:var(--ad);border:1px solid rgba(74,222,128,.2);color:var(--ac);padding:4px 13px;border-radius:20px;font-size:.7rem;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:18px}
+.htag::before{content:'';width:5px;height:5px;background:var(--ac);border-radius:50%;animation:bl 2s infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,4.5vw,3.6rem);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--ac)}
+.hero p{font-size:.9rem;color:var(--dm);line-height:1.65;max-width:480px;margin:0 auto 24px;font-weight:300}
+.stats{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
+.sv{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--ac)}
+.sl{font-size:.7rem;color:var(--dm);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.sec{padding:48px 28px;max-width:1120px;margin:0 auto}
+.lbl{font-size:.68rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--ac);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.ttl{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,2.2vw,1.9rem);font-weight:800;letter-spacing:-.6px;margin-bottom:5px}
+.sub{color:var(--dm);font-size:.85rem;font-weight:300;line-height:1.6;margin-bottom:30px}
+.divider{border:none;border-top:1px solid var(--bd)}
+.band{background:var(--sf);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.skeleton{background:linear-gradient(90deg,var(--sf) 25%,var(--sf2) 50%,var(--sf) 75%);background-size:200% 100%;animation:sk 1.5s infinite;border-radius:8px;height:80px}
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.warn{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--r);padding:18px 22px;margin-bottom:24px;display:none}
+.warn.show{display:flex;align-items:center;gap:12px}
+.wt{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:#dc2626;margin-bottom:3px}
+.ws{font-size:.8rem;color:var(--dm)}
+code{font-family:monospace;background:var(--sf2);border:1px solid var(--bd);padding:2px 8px;border-radius:5px;font-size:.78rem;color:var(--ac)}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.mc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:18px;transition:border-color .2s}
+.mc:hover{border-color:rgba(74,222,128,.3)}
+.mi{font-size:1.1rem;margin-bottom:10px}
+.mv{font-family:'Syne',sans-serif;font-size:1.65rem;font-weight:800;color:var(--ac);letter-spacing:-.4px}
+.mn2{font-size:.7rem;color:var(--dm);text-transform:uppercase;letter-spacing:.4px;font-family:'Syne',sans-serif;font-weight:700;margin-top:2px}
+.md{font-size:.72rem;color:var(--mt);margin-top:5px;line-height:1.4}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.fi-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.fi-l{font-size:.78rem;font-family:'Syne',sans-serif;font-weight:600;min-width:106px;color:var(--dm)}
+.fi-o{flex:1;height:6px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+.fi-i{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:3px}
+.fi-p{font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--ac);min-width:34px;text-align:right}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.tab{padding:6px 16px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--dm);font-size:.8rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;transition:all .15s}
+.tab.active{background:var(--ac);color:#000;border-color:var(--ac)}
+.tab:hover:not(.active){border-color:rgba(74,222,128,.3);color:var(--tx)}
+.panel{display:none}
+.panel.active{display:grid;grid-template-columns:1fr 1fr;gap:18px;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:22px}
+.mh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+.mname{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800}
+.mdesc{font-size:.76rem;color:var(--dm);margin-top:2px;font-weight:300}
+.sr{display:flex;flex-direction:column;align-items:center;justify-content:center;width:70px;height:70px;border-radius:50%;border:2.5px solid;flex-shrink:0}
+.sv2{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800}
+.st{font-size:.48rem;text-transform:uppercase;letter-spacing:.3px;color:var(--dm)}
+.mix-table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:.8rem}
+.mix-table th{font-family:'Syne',sans-serif;font-size:.63rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.4px;padding:6px 8px;text-align:left;border-bottom:2px solid var(--bd)}
+.mix-table td{padding:9px 8px;border-bottom:1px solid var(--bd)}
+.mix-table tr:last-child td{border-bottom:none}
+.pct-v{font-family:'Syne',sans-serif;font-weight:800;color:var(--ac);font-size:.88rem}
+.pct-bar-wrap{width:60px;height:4px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px}
+.pct-bar{height:100%;border-radius:2px}
+.g-v{color:var(--dm);font-size:.75rem}
+.pbadge{font-size:.65rem;background:var(--ad);color:var(--ac);border-radius:5px;padding:1px 6px;font-family:'Syne',sans-serif;font-weight:700}
+.uses{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.chip{padding:3px 9px;border-radius:6px;font-size:.68rem;background:var(--sf2);border:1px solid var(--bd);color:var(--dm);cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--ac);color:var(--ac)}
+.aat{width:100%;border-collapse:collapse;margin-top:10px;font-size:.76rem}
+.aat th{font-family:'Syne',sans-serif;font-size:.63rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.4px;padding:5px 7px;text-align:left}
+.aat td{padding:7px 7px;border-top:1px solid var(--bd)}
+.aat td:first-child{color:var(--dm)}
+.rb{display:flex;align-items:center;gap:5px}
+.rf{height:4px;border-radius:2px;background:var(--ac)}
+.rp{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700}
+.good{color:var(--ac)}.low{color:var(--am)}
+.unit-note{font-size:.67rem;color:var(--mt);margin-top:8px;font-style:italic}
+.egg-box{background:#fefce8;border:1px solid rgba(180,83,9,.2);border-radius:var(--rs);padding:16px;margin-bottom:24px}
+.egg-ttl{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;color:#92400e;margin-bottom:12px}
+.egg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.egg-item{font-size:.72rem;display:flex;justify-content:space-between;padding:4px 8px;background:rgba(180,83,9,.05);border-radius:5px;border:1px solid rgba(180,83,9,.1)}
+.egg-item span:first-child{color:var(--dm)}
+.egg-item span:last-child{font-family:'Syne',sans-serif;font-weight:700;color:#92400e}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:9px}
+.fc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:10px;transition:all .15s}
+.fc:hover{border-color:rgba(74,222,128,.25);transform:translateY(-1px)}
+.frank{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--mt);min-width:22px}
+.fname{font-size:.8rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fgrp{font-size:.68rem;color:var(--dm);margin-top:1px}
+.fscore{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;color:var(--ac)}
+.cb-box{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:28px}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:9px;margin:14px 0 18px}
+.cb{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:all .15s;user-select:none}
+.cb:hover{border-color:rgba(74,222,128,.25)}
+.cb.sel{border-color:var(--ac);background:var(--ad)}
+.cb input{display:none}
+.cbd{width:12px;height:12px;border-radius:3px;border:2px solid var(--mt);flex-shrink:0;transition:all .15s}
+.cb.sel .cbd{background:var(--ac);border-color:var(--ac)}
+.cbn{font-size:.78rem;font-weight:500}
+.cbg{font-size:.65rem;color:var(--dm)}
+.tr2{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.to{padding:5px 13px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--dm);font-size:.78rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
+.to.active{background:var(--ad);color:var(--ac);border-color:rgba(74,222,128,.3)}
+.btn{background:var(--ac);color:#000;border:none;padding:11px 26px;border-radius:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:.83rem;cursor:pointer;transition:all .15s}
+.btn:hover{background:var(--ac2);transform:translateY(-1px)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid #000;border-top-color:transparent;border-radius:50%;animation:sp .6s linear infinite;margin-right:5px;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+.cr{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:18px;margin-top:18px;display:none}
+.cr.show{display:block;animation:fu .2s ease}
+.rt{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:var(--ac);margin-bottom:10px}
+.retrain-btn{background:transparent;border:1px solid var(--bd);color:var(--dm);padding:7px 16px;border-radius:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer;transition:all .15s}
+.retrain-btn:hover{border-color:var(--ac);color:var(--ac)}
+footer{border-top:1px solid var(--bd);padding:28px;text-align:center;color:var(--mt);font-size:.73rem}
+footer strong{color:var(--dm)}
+.target-card{
+  background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);
+  padding:14px 16px;cursor:pointer;transition:all .15s;user-select:none;
+}
+.target-card:hover{border-color:rgba(74,222,128,.3)}
+.target-card.active{border-color:var(--ac);background:var(--adim)}
+.tc-icon{font-size:1.4rem;margin-bottom:6px}
+.tc-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;margin-bottom:2px}
+.tc-desc{font-size:.7rem;color:var(--dm);margin-bottom:10px}
+.tc-input-wrap{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.tc-input{
+  width:64px;background:var(--sf);border:1px solid var(--bd);border-radius:7px;
+  padding:5px 8px;color:var(--tx);font-family:'Syne',sans-serif;font-weight:700;
+  font-size:.9rem;outline:none;text-align:center;
+}
+.target-card.active .tc-input{border-color:rgba(74,222,128,.4);background:var(--sf2)}
+.tc-unit{font-size:.75rem;color:var(--dm);font-family:'Syne',sans-serif;font-weight:600}
+.tc-result{font-size:.7rem;color:var(--ac);font-family:'Syne',sans-serif;font-weight:700}
+.target-card:not(.active) .tc-result{color:var(--mt)}
+@media(max-width:680px){.tc,.panel.active{grid-template-columns:1fr}.sec{padding:36px 16px}.hero{padding:68px 16px 32px}nav{padding:0 14px}.egg-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">PlantProtein<span>AI</span></div>
+  <div class="nl">
+    <a onclick="go('model')">Model</a>
+    <a onclick="go('blends')">Blends</a>
+    <a onclick="go('egg')">Egg Ref</a>
+    <a onclick="go('allfoods')">All Foods</a>
+    <a onclick="go('consumer')">Smart Builder</a>
+  </div>
+  <div class="ss"><div class="dot" id="sdot"></div><span id="stxt">Connecting...</span></div>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="htag">Random Forest · Scipy SLSQP · Live Predictions</div>
+  <h1>Plant Protein<br/><em>Intelligence System</em></h1>
+  <p>ML-driven optimization of plant-based amino acid blends. Output in <strong>% per ingredient</strong> compared to egg protein in <strong>g / 100g protein</strong> — per proposal specification.</p>
+  <div class="stats">
+    <div><div class="sv" id="h-foods">—</div><div class="sl">Plant Foods</div></div>
+    <div><div class="sv" id="h-r2">—</div><div class="sl">Model R²</div></div>
+    <div><div class="sv">9</div><div class="sl">Essential AAs</div></div>
+    <div><div class="sv">99%+</div><div class="sl">Egg Similarity</div></div>
+  </div>
+</div>
+
+<div class="band" id="model">
+  <div class="sec">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div><div class="lbl">Machine Learning</div><div class="ttl">Model Performance</div><div class="sub" style="margin-bottom:0">Random Forest · 80/20 split · Live from your data.</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="retrain-btn" onclick="showUpload()" id="upload-toggle-btn">➕ Add New Data</button>
+        <button class="retrain-btn" onclick="retrain()">🔄 Retrain Model</button>
+      </div>
+    </div>
+
+    <!-- UPLOAD EXTRA DATA PANEL -->
+    <div id="upload-panel" style="display:none;background:var(--sf2);border:1px solid rgba(74,222,128,.2);border-radius:var(--r);padding:20px;margin-bottom:20px;animation:fu .2s ease">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:var(--ac);margin-bottom:6px">➕ Add Extra Excel Data</div>
+      <div style="font-size:.8rem;color:var(--dm);margin-bottom:14px;line-height:1.6">
+        Upload any <code>.xlsx</code> file with the same format as <code>merged.xlsx</code> — it will be <strong style="color:var(--ac)">merged</strong> with the existing data and the model will retrain automatically.<br/>
+        <span style="font-size:.72rem;color:var(--mt)">Format: sheet name = "essential amino acid" · columns: food_group, food, amino_acid, qty</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input type="file" id="extra-file-input" accept=".xlsx,.xls"
+          style="flex:1;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 12px;color:var(--tx);font-size:.82rem;cursor:pointer"/>
+        <button class="btn" onclick="uploadExtra()" style="padding:9px 20px">Upload & Retrain →</button>
+      </div>
+      <div id="upload-status" style="margin-top:12px;font-size:.8rem;display:none"></div>
+      <!-- Extra files list -->
+      <div id="extra-files-list" style="margin-top:14px"></div>
+    </div>
+    <div class="warn" id="warn">
+      <div style="font-size:1.3rem">⚠️</div>
+      <div><div class="wt">Server not running</div><div class="ws">Run <code>python app.py</code> then refresh.</div></div>
+    </div>
+    <div class="mg" id="mg"></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="tc">
+    <div>
+      <div class="lbl">Analysis</div><div class="ttl">Feature Importance</div>
+      <div class="sub">Which amino acids drive the quality score.</div>
+      <div id="fi"></div>
+    </div>
+    <div>
+      <div class="lbl">WHO Reference</div><div class="ttl">Minimum Requirements</div>
+      <div class="sub">mg per gram of protein (WHO/FAO/UNU 2007).</div>
+      <div style="position:relative;height:230px"><canvas id="wc"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider"/>
+
+<div class="sec" id="egg">
+  <div class="lbl">Proposal — Page 4</div>
+  <div class="ttl">Egg Protein Reference</div>
+  <div class="sub">Exact values from proposal used for all comparisons — <strong>g per 100g protein</strong>.</div>
+  <div class="egg-box">
+    <div class="egg-ttl">🥚 Complete Protein Reference (g / 100g protein)</div>
+    <div class="egg-grid" id="egg-grid"></div>
+  </div>
+</div>
+
+<hr class="divider"/>
+
+<div class="sec" id="blends">
+  <div class="lbl">System Output — Proposal Section 6</div>
+  <div class="ttl">Optimized Protein Blends</div>
+  <div class="sub">Output: Food · Category · % in Mixture · Grams — exactly as specified in the proposal.</div>
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"><div class="skeleton"></div></div>
+</div>
+
+<hr class="divider"/>
+
+<div class="sec" id="foods">
+  <div class="lbl">ML Rankings</div>
+  <div class="ttl">Top Predicted Foods</div>
+  <div class="sub">Highest-scoring plant foods with Food-ID and estimated protein content per 100g.</div>
+  <div class="fg" id="fg"><div class="skeleton"></div></div>
+</div>
+
+<hr class="divider"/>
+
+<!-- ALL FOODS -->
+<div class="sec" id="allfoods">
+  <div class="lbl">Dataset Explorer</div>
+  <div class="ttl">All Plant Foods</div>
+  <div class="sub" id="all-foods-sub">All <span id="all-foods-total">—</span> plant foods from the dataset — sorted by ML score · search or filter by category.</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+    <input id="search-input" type="text" placeholder="🔍  Search food name..."
+      style="flex:1;min-width:200px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none"/>
+    <select id="cat-filter"
+      style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 14px;color:var(--dm);font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;outline:none;cursor:pointer">
+      <option value="">All Categories</option>
+      <option value="Vegetables">Vegetables</option>
+      <option value="16 Legumes and Legume Products">Legumes</option>
+      <option value="Fruits">Fruits</option>
+      <option value="Nuts and Seeds">Nuts & Seeds</option>
+      <option value="Seeds">Seeds</option>
+    </select>
+    <div style="display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--dm);font-family:'Syne',sans-serif;font-weight:700">
+      Showing: <span id="foods-count" style="color:var(--ac)">—</span>
+    </div>
+  </div>
+  <div style="overflow-x:auto">
+    <table id="all-foods-table" style="width:100%;border-collapse:collapse;font-size:.8rem">
+      <thead>
+        <tr style="border-bottom:2px solid var(--bd)">
+          <th onclick="sortFoods('food_id')"   style="padding:8px 10px;text-align:left;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none">ID ↕</th>
+          <th onclick="sortFoods('food')"       style="padding:8px 10px;text-align:left;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none">Food Name ↕</th>
+          <th onclick="sortFoods('food_group')" style="padding:8px 10px;text-align:left;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none">Category ↕</th>
+          <th onclick="sortFoods('protein_content')" style="padding:8px 10px;text-align:right;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none">Protein ↕</th>
+          <th onclick="sortFoods('predicted_score')" style="padding:8px 10px;text-align:right;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none">ML Score ↕</th>
+        </tr>
+      </thead>
+      <tbody id="foods-tbody"></tbody>
+    </table>
+  </div>
+  <div style="display:flex;justify-content:center;gap:8px;margin-top:20px" id="pagination"></div>
+</div>
+
+<hr class="divider"/>
+
+<div class="sec" id="consumer">
+  <div class="lbl">Consumer Module — Proposal Section 10</div>
+  <div class="ttl">Smart Protein Builder</div>
+  <div class="sub" id="consumer-sub">Select ingredients → get the optimal plant protein blend + an AI-suggested recipe to prepare it.</div>
+  <div class="cb-box">
+
+    <!-- PROTEIN TARGET -->
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.77rem;color:var(--dm);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">Protein Target — Choose Your Reference</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px" id="target-cards">
+
+      <!-- EGGS -->
+      <div class="target-card active" id="tc-egg" onclick="selectTarget('egg')">
+        <div class="tc-icon">🥚</div>
+        <div class="tc-name">Eggs</div>
+        <div class="tc-desc">6g protein each</div>
+        <div class="tc-input-wrap">
+          <input type="number" id="qty-egg" value="2" min="1" max="20" onclick="event.stopPropagation()" oninput="selectTarget('egg');updateTarget()" class="tc-input"/>
+          <span class="tc-unit">eggs</span>
+        </div>
+        <div class="tc-result" id="res-egg">= 12g protein · 100g blend</div>
+      </div>
+
+      <!-- BEEF -->
+      <div class="target-card" id="tc-beef" onclick="selectTarget('beef')">
+        <div class="tc-icon">🥩</div>
+        <div class="tc-name">Beef</div>
+        <div class="tc-desc">26g protein / 100g</div>
+        <div class="tc-input-wrap">
+          <input type="number" id="qty-beef" value="100" min="50" max="500" step="50" onclick="event.stopPropagation()" oninput="selectTarget('beef');updateTarget()" class="tc-input"/>
+          <span class="tc-unit">g</span>
+        </div>
+        <div class="tc-result" id="res-beef">= 26g protein · 200g blend</div>
+      </div>
+
+      <!-- CHICKEN -->
+      <div class="target-card" id="tc-chicken" onclick="selectTarget('chicken')">
+        <div class="tc-icon">🍗</div>
+        <div class="tc-name">Chicken Breast</div>
+        <div class="tc-desc">31g protein / 100g</div>
+        <div class="tc-input-wrap">
+          <input type="number" id="qty-chicken" value="100" min="50" max="500" step="50" onclick="event.stopPropagation()" oninput="selectTarget('chicken');updateTarget()" class="tc-input"/>
+          <span class="tc-unit">g</span>
+        </div>
+        <div class="tc-result" id="res-chicken">= 31g protein · 251g blend</div>
+      </div>
+
+      <!-- TUNA -->
+      <div class="target-card" id="tc-tuna" onclick="selectTarget('tuna')">
+        <div class="tc-icon">🐟</div>
+        <div class="tc-name">Tuna Can</div>
+        <div class="tc-desc">25g protein / can (85g)</div>
+        <div class="tc-input-wrap">
+          <input type="number" id="qty-tuna" value="1" min="1" max="10" onclick="event.stopPropagation()" oninput="selectTarget('tuna');updateTarget()" class="tc-input"/>
+          <span class="tc-unit">can(s)</span>
+        </div>
+        <div class="tc-result" id="res-tuna">= 25g protein · 200g blend</div>
+      </div>
+
+      <!-- MILK -->
+      <div class="target-card" id="tc-milk" onclick="selectTarget('milk')">
+        <div class="tc-icon">🥛</div>
+        <div class="tc-name">Milk</div>
+        <div class="tc-desc">8g protein / cup (240ml)</div>
+        <div class="tc-input-wrap">
+          <input type="number" id="qty-milk" value="1" min="1" max="10" onclick="event.stopPropagation()" oninput="selectTarget('milk');updateTarget()" class="tc-input"/>
+          <span class="tc-unit">cup(s)</span>
+        </div>
+        <div class="tc-result" id="res-milk">= 8g protein · 65g blend</div>
+      </div>
+
+    </div>
+
+    <!-- DEFAULT 12 FOODS -->
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.77rem;color:var(--dm);margin-bottom:9px;text-transform:uppercase;letter-spacing:.5px">Quick Select — Common Ingredients</div>
+    <div class="cg" id="cg"></div>
+
+    <!-- SEARCH BAR -->
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.77rem;color:var(--dm);margin-bottom:9px;margin-top:20px;text-transform:uppercase;letter-spacing:.5px">➕ Add More from All <span id="consumer-foods-count">—</span> Foods</div>
+    <div style="display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+      <input id="c-search" type="text" placeholder="🔍  Search any food..."
+        style="flex:1;min-width:200px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none"/>
+      <select id="c-cat"
+        style="background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 14px;color:var(--dm);font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;outline:none;cursor:pointer">
+        <option value="">All Categories</option>
+        <option value="Vegetables">Vegetables</option>
+        <option value="16 Legumes and Legume Products">Legumes</option>
+        <option value="Fruits">Fruits</option>
+        <option value="Nuts and Seeds">Nuts & Seeds</option>
+        <option value="Seeds">Seeds</option>
+      </select>
+    </div>
+    <!-- SEARCH RESULTS -->
+    <div id="c-results" style="display:none;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);max-height:220px;overflow-y:auto;margin-bottom:14px"></div>
+
+    <!-- SELECTED EXTRAS -->
+    <div id="extras-wrap" style="display:none;margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.77rem;color:var(--ac);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">
+        ✅ Added from Search <span id="extra-count" style="color:var(--ac)"></span>
+      </div>
+      <div id="extra-chips" style="display:flex;flex-wrap:wrap;gap:7px"></div>
+    </div>
+
+    <button class="btn" id="cbtn" onclick="calcConsumer()">Calculate Optimal Blend →</button>
+
+    <!-- BLEND RESULT -->
+    <div class="cr" id="cr">
+      <div class="rt" id="rt">Recommended Blend</div>
+      <div id="ri"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd);font-size:.82rem;color:var(--dm)">
+        Similarity to Egg Protein = <strong style="color:var(--ac);font-family:'Syne',sans-serif;font-size:1rem" id="rs">—</strong>
+      </div>
+
+      <!-- AI RECIPE SUGGESTION -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--bd)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--ac)">🍽️ AI Recipe Suggestion</div>
+          <button onclick="generateRecipe()" id="recipe-btn"
+            style="background:transparent;border:1px solid rgba(74,222,128,.4);color:var(--ac);padding:6px 16px;border-radius:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer;transition:all .15s"
+            onmouseover="this.style.background='var(--adim)'" onmouseout="this.style.background='transparent'">
+            ✨ Generate Recipe
+          </button>
+        </div>
+        <div id="recipe-result" style="display:none">
+          <!-- loading -->
+          <div id="recipe-loading" style="display:none;text-align:center;padding:24px;color:var(--dm);font-size:.85rem">
+            <div style="width:20px;height:20px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:sp .7s linear infinite;margin:0 auto 10px"></div>
+            Generating recipe with AI...
+          </div>
+          <!-- recipe card -->
+          <div id="recipe-card" style="display:none;background:var(--sf2);border:1px solid rgba(74,222,128,.15);border-radius:var(--r);padding:22px">
+            <div id="recipe-name" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:4px;color:var(--tx)"></div>
+            <div id="recipe-type" style="font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--dm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Ingredients</div>
+                <div id="recipe-ingredients" style="font-size:.82rem;line-height:1.8;color:var(--tx)"></div>
+              </div>
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--dm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Preparation Steps</div>
+                <div id="recipe-steps" style="font-size:.82rem;line-height:1.8;color:var(--tx)"></div>
+              </div>
+            </div>
+            <div id="recipe-note" style="margin-top:14px;padding:10px 14px;background:var(--adim);border-radius:8px;font-size:.78rem;color:var(--dm);border-left:3px solid var(--ac)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO MAKE MODAL -->
+<div id="howto-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px)" onclick="closeHowTo(event)">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:36px;max-width:560px;width:92%;max-height:82vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.18)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+      <div id="howto-title" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:#0f172a;line-height:1.4;max-width:460px"></div>
+      <button onclick="document.getElementById('howto-modal').style.display='none'" style="background:transparent;border:1px solid #cbd5e1;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:.85rem;color:#64748b;margin-left:12px;flex-shrink:0;font-family:'Syne',sans-serif;font-weight:700">✕</button>
+    </div>
+    <div id="howto-steps" style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px"></div>
+    <div id="howto-tip" style="background:#eff6ff;border-left:3px solid #1e3a8a;border-radius:0 8px 8px 0;padding:12px 16px;font-size:.82rem;color:#1e40af;font-family:'Syne',sans-serif;font-weight:600;line-height:1.5"></div>
+  </div>
+</div>
+
+<footer>
+  <strong>PlantProtein AI — Graduation Project</strong> &nbsp;·&nbsp; Random Forest n=200 &nbsp;·&nbsp; Scipy SLSQP<br/>
+  <span style="margin-top:4px;display:block">Egg ref: g/100g protein (proposal p.4) · WHO/FAO/UNU 2007 · USDA FoodData Central</span>
+</footer>
+
+<script>
+const API='http://localhost:5000/api';
+const GC={'Fruits':'#c2410c','16 Legumes and Legume Products':'#166534','Nuts and Seeds':'#92400e','Vegetables':'#1e40af','Seeds':'#4f46e5','Legumes':'#166534','Nuts':'#92400e'};
+const AAS=['Histidine','Isoleucine','Leucine','Lysine','Methionine','Phenylalanine','Threonine','Tryptophan','Valine'];
+const EGG={Histidine:2.2,Isoleucine:5.4,Leucine:8.6,Lysine:7.0,Methionine:3.4,Phenylalanine:5.7,Threonine:4.7,Tryptophan:1.6,Valine:6.6};
+const WHO={Histidine:15,Isoleucine:30,Leucine:59,Lysine:45,Methionine:16,Phenylalanine:38,Threonine:23,Tryptophan:7,Valine:39};
+const CF=[
+  {n:'Lentils',g:'Legumes',aa:{Histidine:0.69,Isoleucine:1.02,Leucine:1.70,Lysine:1.61,Methionine:0.21,Phenylalanine:1.16,Threonine:0.88,Tryptophan:0.22,Valine:1.18}},
+  {n:'Chickpeas',g:'Legumes',aa:{Histidine:0.69,Isoleucine:1.07,Leucine:1.62,Lysine:1.42,Methionine:0.27,Phenylalanine:1.26,Threonine:0.87,Tryptophan:0.19,Valine:1.09}},
+  {n:'Black Beans',g:'Legumes',aa:{Histidine:0.77,Isoleucine:1.23,Leucine:2.04,Lysine:1.75,Methionine:0.34,Phenylalanine:1.43,Threonine:1.07,Tryptophan:0.26,Valine:1.40}},
+  {n:'Edamame',g:'Legumes',aa:{Histidine:0.69,Isoleucine:1.28,Leucine:1.95,Lysine:1.59,Methionine:0.36,Phenylalanine:1.28,Threonine:1.10,Tryptophan:0.26,Valine:1.20}},
+  {n:'Quinoa',g:'Seeds',aa:{Histidine:0.41,Isoleucine:0.79,Leucine:1.32,Lysine:1.21,Methionine:0.31,Phenylalanine:0.91,Threonine:0.63,Tryptophan:0.14,Valine:0.94}},
+  {n:'Sunflower Seeds',g:'Seeds',aa:{Histidine:0.48,Isoleucine:0.74,Leucine:1.14,Lysine:0.53,Methionine:0.39,Phenylalanine:0.87,Threonine:0.58,Tryptophan:0.19,Valine:0.82}},
+  {n:'Pumpkin Seeds',g:'Seeds',aa:{Histidine:0.50,Isoleucine:0.72,Leucine:1.29,Lysine:0.93,Methionine:0.31,Phenylalanine:0.82,Threonine:0.56,Tryptophan:0.17,Valine:0.87}},
+  {n:'Almonds',g:'Nuts',aa:{Histidine:0.41,Isoleucine:0.62,Leucine:1.10,Lysine:0.48,Methionine:0.15,Phenylalanine:0.84,Threonine:0.51,Tryptophan:0.16,Valine:0.64}},
+  {n:'Broccoli',g:'Vegetables',aa:{Histidine:0.06,Isoleucine:0.13,Leucine:0.19,Lysine:0.19,Methionine:0.05,Phenylalanine:0.14,Threonine:0.11,Tryptophan:0.03,Valine:0.15}},
+  {n:'Spinach',g:'Vegetables',aa:{Histidine:0.06,Isoleucine:0.15,Leucine:0.22,Lysine:0.20,Methionine:0.05,Phenylalanine:0.15,Threonine:0.12,Tryptophan:0.04,Valine:0.16}},
+  {n:'Avocado',g:'Fruits',aa:{Histidine:0.06,Isoleucine:0.11,Leucine:0.18,Lysine:0.15,Methionine:0.04,Phenylalanine:0.12,Threonine:0.10,Tryptophan:0.03,Valine:0.14}},
+  {n:'Potato',g:'Vegetables',aa:{Histidine:0.05,Isoleucine:0.10,Leucine:0.16,Lysine:0.15,Methionine:0.04,Phenylalanine:0.11,Threonine:0.10,Tryptophan:0.03,Valine:0.13}}
+];
+let selT=100, selF=new Set(), extraFoods={}, rc={};
+function go(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'})}
+
+// EGG REFERENCE BOX
+document.getElementById('egg-grid').innerHTML=AAS.map(aa=>`<div class="egg-item"><span>${aa}</span><span>${EGG[aa]}g</span></div>`).join('');
+
+// DEFAULT 12 FOODS CHECKBOXES
+document.getElementById('cg').innerHTML=CF.map((f,i)=>{
+  const c=GC[f.g]||'#4ade80';
+  return`<label class="cb" id="cb${i}"><input type="checkbox" id="chk${i}"/><div class="cbd"></div>
+    <div><div class="cbn">${f.n}</div><div class="cbg" style="color:${c}">${f.g}</div></div></label>`;
+}).join('');
+
+// attach events after render
+CF.forEach((_,i)=>{
+  document.getElementById(`chk${i}`).addEventListener('change', function(){
+    const el=document.getElementById(`cb${i}`);
+    if(this.checked){selF.add(i);el.classList.add('sel')}
+    else{selF.delete(i);el.classList.remove('sel')}
+  });
+});
+
+function tog(i,el){} // kept for safety, logic moved to event listeners
+// ── PROTEIN TARGET SYSTEM ────────────────────────────────────────────────────
+// protein per unit for each source
+const TARGET_REFS = {
+  egg:     { proteinPerUnit: 6,   unitLabel: 'egg',   blendRatio: 8.1  },  // 6g protein/egg → ~8g blend/g protein
+  beef:    { proteinPerUnit: 0.26, unitLabel: 'g',    blendRatio: 7.7  },  // 26g/100g
+  chicken: { proteinPerUnit: 0.31, unitLabel: 'g',    blendRatio: 8.1  },  // 31g/100g
+  tuna:    { proteinPerUnit: 25,   unitLabel: 'can',  blendRatio: 8.0  },  // 25g/can
+  milk:    { proteinPerUnit: 8,    unitLabel: 'cup',  blendRatio: 8.1  },  // 8g/cup
+};
+
+let activeTarget = 'egg';
+
+function calcBlendGrams(source, qty){
+  const ref = TARGET_REFS[source];
+  let proteinG = 0;
+  if(source==='beef'||source==='chicken') proteinG = ref.proteinPerUnit * qty;
+  else proteinG = ref.proteinPerUnit * qty;
+  // blend needed ≈ protein * ratio (approx 8g blend per 1g protein for plant foods)
+  return Math.max(50, Math.round(proteinG * ref.blendRatio));
+}
+
+function calcProteinG(source, qty){
+  const ref = TARGET_REFS[source];
+  if(source==='beef'||source==='chicken') return Math.round(ref.proteinPerUnit * qty);
+  return Math.round(ref.proteinPerUnit * qty);
+}
+
+function selectTarget(src){
+  activeTarget = src;
+  document.querySelectorAll('.target-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tc-'+src)?.classList.add('active');
+  updateTarget();
+}
+
+function updateTarget(){
+  // update all result labels
+  const sources = ['egg','beef','chicken','tuna','milk'];
+  sources.forEach(src=>{
+    const inp = document.getElementById('qty-'+src);
+    const res = document.getElementById('res-'+src);
+    if(!inp||!res) return;
+    const qty = parseFloat(inp.value)||1;
+    const protein = calcProteinG(src, qty);
+    const blend   = calcBlendGrams(src, qty);
+    const labels  = {egg:'egg(s)',beef:'g beef',chicken:'g chicken',tuna:'can(s)',milk:'cup(s)'};
+    res.textContent = `= ${protein}g protein · ${blend}g blend`;
+  });
+  // update selT
+  const activeInp = document.getElementById('qty-'+activeTarget);
+  const qty = parseFloat(activeInp?.value)||1;
+  selT = calcBlendGrams(activeTarget, qty);
+}
+
+// init on load
+updateTarget();
+
+// SERVER CHECK
+// ── AI RECIPE GENERATOR ───────────────────────────────────────────────────────
+let lastBlendData = null; // store last blend result for recipe generation
+
+async function generateRecipe(){
+  console.log('generateRecipe called, lastBlendData:', lastBlendData);
+  if(!lastBlendData){
+    alert('Please calculate a blend first.');
+    return;
+  }
+
+  const recipeResult = document.getElementById('recipe-result');
+  const recipeLoading = document.getElementById('recipe-loading');
+  const recipeCard = document.getElementById('recipe-card');
+  const btn = document.getElementById('recipe-btn');
+
+  recipeResult.style.display = 'block';
+  recipeLoading.style.display = 'block';
+  recipeCard.style.display = 'none';
+  btn.innerHTML = '⏳ Generating...';
+  btn.disabled = true;
+
+  console.log('Sending to API:', {
+    ingredients: lastBlendData.weights,
+    total_grams: lastBlendData.total_grams,
+    egg_similarity: lastBlendData.egg_similarity
+  });
+
+  try{
+    const r = await fetch(`${API}/generate_recipe`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        ingredients: lastBlendData.weights,
+        total_grams: lastBlendData.total_grams,
+        egg_similarity: lastBlendData.egg_similarity,
+        protein_grams: lastBlendData.protein_grams || calcProteinG(activeTarget, parseFloat(document.getElementById('qty-'+activeTarget)?.value)||1),
+        target_label: lastBlendData.target_label || ''
+      })
+    });
+
+    console.log('Response status:', r.status);
+    const data = await r.json();
+    console.log('Response data:', data);
+
+    if(!data.success) throw new Error(data.error || 'Unknown error');
+    const recipe = data.recipe;
+
+    document.getElementById('recipe-name').textContent = recipe.name;
+    document.getElementById('recipe-type').textContent = '🍽️ ' + recipe.type;
+    document.getElementById('recipe-ingredients').innerHTML = recipe.ingredients
+      .map(ing => `<div style="padding:3px 0;border-bottom:1px solid var(--bd)">• ${ing}</div>`).join('');
+    document.getElementById('recipe-steps').innerHTML = recipe.steps
+      .map((s,i) => `<div style="padding:4px 0;display:flex;gap:8px">
+        <span style="color:var(--ac);font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0">${i+1}.</span>
+        <span>${s.replace(/^Step \d+:\s*/i,'')}</span>
+      </div>`).join('');
+    document.getElementById('recipe-note').innerHTML = '💡 ' + recipe.nutrition_note;
+
+    recipeLoading.style.display = 'none';
+    recipeCard.style.display = 'block';
+
+  } catch(e){
+    console.error('Recipe error:', e);
+    recipeLoading.style.display = 'none';
+    recipeResult.innerHTML = `
+      <div style="color:#f87171;font-size:.82rem;padding:12px;background:rgba(239,68,68,.08);border-radius:8px;border:1px solid rgba(239,68,68,.2)">
+        ❌ ${e.message || 'Could not generate recipe. Try again.'}
+      </div>`;
+  }
+  btn.innerHTML = '✨ Generate Recipe';
+  btn.disabled = false;
+}
+function showUpload(){
+  const p=document.getElementById('upload-panel');
+  p.style.display=p.style.display==='none'?'block':'none';
+  if(p.style.display==='block') loadExtraFilesList();
+}
+
+async function loadExtraFilesList(){
+  try{
+    const d=await fetch(`${API}/extra_files`).then(r=>r.json());
+    const el=document.getElementById('extra-files-list');
+    if(!d.files.length){el.innerHTML='';return;}
+    el.innerHTML=`<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;color:var(--dm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Currently Merged Files</div>`+
+      d.files.map(f=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;margin-bottom:6px">
+        <span style="font-size:.8rem">📄 ${f.name}</span>
+        <button onclick="removeExtraFile('${f.name}')" style="background:transparent;border:1px solid rgba(239,68,68,.3);color:#f87171;padding:3px 10px;border-radius:6px;font-size:.72rem;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700">Remove</button>
+      </div>`).join('');
+  }catch(e){console.error(e)}
+}
+
+async function uploadExtra(){
+  const input=document.getElementById('extra-file-input');
+  const status=document.getElementById('upload-status');
+  if(!input.files.length){alert('Please select an Excel file first.');return;}
+  const file=input.files[0];
+  const formData=new FormData();
+  formData.append('file',file);
+  status.style.display='block';
+  status.innerHTML='<span style="color:var(--dm)">⏳ Uploading and retraining...</span>';
+  try{
+    const r=await fetch(`${API}/add_data`,{method:'POST',body:formData});
+    const d=await r.json();
+    if(d.success){
+      status.innerHTML=`<span style="color:var(--ac)">✅ ${d.message} · New total: ${d.metrics.total_foods} foods · R²=${d.metrics.r2}</span>`;
+      input.value='';
+      loadExtraFilesList();
+      // reset caches so everything reloads fresh
+      rc={};
+      allFoodsData=[];
+      filteredFoods=[];
+      await loadAll();
+    } else {
+      status.innerHTML=`<span style="color:#f87171">❌ Error: ${d.error}</span>`;
+    }
+  }catch(e){
+    status.innerHTML='<span style="color:#f87171">❌ Server error — make sure app.py is running.</span>';
+  }
+}
+
+async function removeExtraFile(filename){
+  if(!confirm(`Remove "${filename}" and retrain?`)) return;
+  try{
+    const r=await fetch(`${API}/remove_extra`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({filename})});
+    const d=await r.json();
+    if(d.success){
+      rc={};
+      allFoodsData=[];
+      filteredFoods=[];
+      loadExtraFilesList();
+      await loadAll();
+    }
+  }catch(e){console.error(e)}
+}
+
+let selectedUse = {}; // {blend_key: use_index}
+
+function selectUse(k, i){
+  const bl = window._blends; if(!bl||!bl[k]) return;
+  const uses = bl[k].uses; if(!uses||!uses[i]) return;
+  // update selected use
+  selectedUse[k] = i;
+  // highlight selected chip
+  const allChips = document.querySelectorAll(`[id^="use-${k}-"]`);
+  allChips.forEach((c,ci)=>{
+    c.style.background = ci===i ? 'var(--ac)' : '';
+    c.style.color = ci===i ? '#fff' : '';
+    c.style.borderColor = ci===i ? 'var(--ac)' : '';
+  });
+  // update button text and show it
+  const btn = document.getElementById(`howto-btn-${k}`);
+  if(btn){
+    btn.textContent = `🔧 How to Make: ${uses[i].label} →`;
+    btn.style.display = 'block';
+  }
+}
+
+function showHowTo(k){
+  const bl = window._blends;
+  if(!bl||!bl[k]) { console.log('no blend', k); return; }
+  const uses = bl[k].uses;
+  if(!uses||!uses.length) { console.log('no uses', k); return; }
+  const i = selectedUse[k] !== undefined ? selectedUse[k] : 0;
+  const u = uses[i];
+  if(!u) { console.log('no use at index', i); return; }
+  document.getElementById('howto-title').textContent = 'How to Make: ' + u.label;
+  document.getElementById('howto-steps').innerHTML = u.steps.map((s,si)=>`
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <span style="background:#1e3a8a;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:.72rem;min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">${si+1}</span>
+      <span style="font-size:.85rem;color:#0f172a;line-height:1.6">${s}</span>
+    </div>`).join('');
+  document.getElementById('howto-tip').innerHTML = '💡 ' + u.tip;
+  document.getElementById('howto-modal').style.display = 'block';
+}
+
+function closeHowTo(e){
+  if(e.target===document.getElementById('howto-modal'))
+    document.getElementById('howto-modal').style.display='none';
+}
+
+async function checkServer(){
+  try{
+    const r=await fetch(`${API}/status`,{signal:AbortSignal.timeout(3000)});
+    const d=await r.json();
+    document.getElementById('sdot').classList.add('on');
+    document.getElementById('stxt').textContent='Server Online';
+    document.getElementById('warn').classList.remove('show');
+    if(d.trained) loadAll(); else await retrain();
+  }catch{
+    document.getElementById('sdot').classList.remove('on');
+    document.getElementById('stxt').textContent='Server Offline';
+    document.getElementById('warn').classList.add('show');
+    showOffline();
+  }
+}
+
+async function retrain(){
+  const b=document.querySelector('.retrain-btn');
+  b.innerHTML='<span class="spin"></span> Training...';b.disabled=true;
+  try{
+    const r=await fetch(`${API}/train`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({file:'merged.xlsx'})});
+    const d=await r.json();
+    if(d.success){
+      rc={};
+      allFoodsData=[];
+      filteredFoods=[];
+      await loadAll();
+    } else alert('Error: '+d.error);
+  }catch{alert('Cannot connect to server.');}
+  b.innerHTML='🔄 Retrain Model';b.disabled=false;
+}
+
+async function loadAll(){await Promise.all([loadMetrics(),loadBlends(),loadFoods(),loadAllFoods()]);}
+
+async function loadMetrics(){
+  try{
+    const d=await fetch(`${API}/metrics`).then(r=>r.json());
+    document.getElementById('h-foods').textContent=d.total_foods?.toLocaleString()||'—';
+    document.getElementById('h-r2').textContent=d.r2||'—';
+    document.getElementById('mg').innerHTML=[
+      {i:'🎯',v:d.r2,n:'R² Score',d:'93%+ variance explained'},
+      {i:'📉',v:d.rmse,n:'RMSE',d:'Test set error'},
+      {i:'🌱',v:d.total_foods?.toLocaleString(),n:'Plant Foods',d:'5 food categories'},
+      {i:'🧬',v:`${d.train_size}/${d.test_size}`,n:'Train/Test',d:'80/20 split'},
+      {i:'🌳',v:'200',n:'RF Trees',d:'max_depth = 10'},
+      {i:'🥚',v:'99%+',n:'Egg Match',d:'g/100g protein units'}
+    ].map(m=>`<div class="mc"><div class="mi">${m.i}</div><div class="mv">${m.v}</div><div class="mn2">${m.n}</div><div class="md">${m.d}</div></div>`).join('');
+    const fi=d.feature_importance||{};const fm=Math.max(...Object.values(fi));
+    document.getElementById('fi').innerHTML=Object.entries(fi).sort((a,b)=>b[1]-a[1]).map(([aa,v])=>
+      `<div class="fi-row"><div class="fi-l">${aa}</div><div class="fi-o"><div class="fi-i" style="width:${v/fm*100}%"></div></div><div class="fi-p">${(v*100).toFixed(1)}%</div></div>`
+    ).join('');
+  }catch(e){console.error(e)}
+}
+
+async function loadBlends(){
+  document.getElementById('panels').innerHTML='<div class="skeleton"></div>';
+  try{const b=await fetch(`${API}/blends`).then(r=>r.json());renderBlends(b);}
+  catch(e){console.error(e)}
+}
+
+async function loadFoods(){
+  try{
+    const foods=await fetch(`${API}/top_foods?n=10`).then(r=>r.json());
+    document.getElementById('fg').innerHTML=foods.map((f,i)=>{
+      const c=GC[f.food_group]||'#4ade80';
+      return`<div class="fc"><div class="frank">#${i+1}</div>
+        <div style="flex:1;min-width:0"><div class="fname">${f.food}</div><div class="fgrp" style="color:${c}">${f.food_group}</div></div>
+        <div style="text-align:right"><div class="fscore">${f.predicted_score}</div><div style="font-size:.65rem;color:var(--mt)">${f.protein_content}g/100g</div></div>
+      </div>`;
+    }).join('');
+  }catch(e){console.error(e)}
+}
+
+// ALL FOODS TABLE
+let allFoodsData=[], filteredFoods=[], sortCol='predicted_score', sortDir=-1, curPage=1;
+const PER_PAGE=20;
+
+async function loadAllFoods(){
+  try{
+    const d=await fetch(`${API}/all_foods`).then(r=>r.json());
+    allFoodsData=d; filteredFoods=d; curPage=1;
+    const total=d.length.toLocaleString();
+    // update all dynamic counts
+    const ids=['consumer-foods-count','all-foods-total','consumer-total'];
+    ids.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=total;});
+    renderFoodsTable();
+    setupConsumerSearch();
+  }catch(e){console.error(e)}
+}
+
+function filterFoods(){
+  if(!allFoodsData.length) return;
+  const q=document.getElementById('search-input').value.toLowerCase().trim();
+  const cat=document.getElementById('cat-filter').value;
+  filteredFoods=allFoodsData.filter(f=>(!q||f.food.toLowerCase().includes(q))&&(!cat||f.food_group===cat));
+  curPage=1; renderFoodsTable();
+}
+
+function sortFoods(col){
+  if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=-1;}
+  filteredFoods.sort((a,b)=>{const av=a[col]??'',bv=b[col]??'';return typeof av==='number'?(av-bv)*sortDir:av.localeCompare(bv)*sortDir;});
+  renderFoodsTable();
+}
+
+function renderFoodsTable(){
+  const total=filteredFoods.length;
+  document.getElementById('foods-count').textContent=`${total} foods`;
+  const start=(curPage-1)*PER_PAGE,end=Math.min(start+PER_PAGE,total);
+  document.getElementById('foods-tbody').innerHTML=filteredFoods.slice(start,end).map((f,i)=>{
+    const c=GC[f.food_group]||'#4ade80';
+    return`<tr style="border-bottom:1px solid var(--bd);transition:background .15s" onmouseover="this.style.background='var(--sf2)'" onmouseout="this.style.background='transparent'">
+      <td style="padding:9px 10px;color:var(--mt);font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem">${f.food_id}</td>
+      <td style="padding:9px 10px;font-weight:500;max-width:300px">${f.food}</td>
+      <td style="padding:9px 10px"><span style="color:${c};font-size:.75rem;font-family:'Syne',sans-serif;font-weight:700">${f.food_group}</span></td>
+      <td style="padding:9px 10px;text-align:right;color:var(--dm);font-size:.78rem">${f.protein_content}g</td>
+      <td style="padding:9px 10px;text-align:right">
+        <span style="font-family:'Syne',sans-serif;font-weight:800;color:var(--ac)">${f.predicted_score}</span>
+        <div style="width:60px;height:3px;background:rgba(255,255,255,.04);border-radius:2px;margin-top:3px;margin-left:auto;overflow:hidden">
+          <div style="width:${Math.round(f.predicted_score)}%;height:100%;background:${c};border-radius:2px"></div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  const pages=Math.ceil(total/PER_PAGE);
+  document.getElementById('pagination').innerHTML=Array.from({length:Math.min(pages,8)},(_,i)=>{
+    const p=i+1;
+    return`<button onclick="goPage(${p})" style="width:32px;height:32px;border-radius:8px;border:1px solid ${p===curPage?'var(--ac)':'var(--bd)'};background:${p===curPage?'var(--ac)':'transparent'};color:${p===curPage?'#000':'var(--dm)'};font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer">${p}</button>`;
+  }).join('')+(pages>8?`<span style="color:var(--dm);font-size:.8rem;align-self:center">... ${pages} pages</span>`:'');
+}
+
+function goPage(p){curPage=p;renderFoodsTable();document.getElementById('allfoods').scrollIntoView({behavior:'smooth',block:'start'})}
+
+// CONSUMER SEARCH from all foods
+function setupConsumerSearch(){
+  const inp=document.getElementById('c-search');
+  const cat=document.getElementById('c-cat');
+  if(!inp||!cat) return;
+  inp.addEventListener('input', searchConsumer);
+  cat.addEventListener('change', searchConsumer);
+  inp.addEventListener('blur',()=>setTimeout(()=>{document.getElementById('c-results').style.display='none'},200));
+  inp.addEventListener('focus', searchConsumer);
+}
+
+function searchConsumer(){
+  if(!allFoodsData.length) return;
+  const q=document.getElementById('c-search').value.toLowerCase().trim();
+  const cat=document.getElementById('c-cat').value;
+  const res=document.getElementById('c-results');
+  if(!q&&!cat){res.style.display='none';return;}
+  const matches=allFoodsData.filter(f=>
+    (!q||f.food.toLowerCase().includes(q))&&
+    (!cat||f.food_group===cat)&&
+    !extraFoods[f.food]
+  ).slice(0,30);
+  if(!matches.length){res.style.display='none';return;}
+  res.style.display='block';
+  res.innerHTML=matches.map(f=>{
+    const c=GC[f.food_group]||'#4ade80';
+    const aaArr=JSON.stringify(AAS.map(a=>f[a]||0));
+    return`<div onclick='addExtra(${JSON.stringify(f.food)},${JSON.stringify(f.food_group)},${aaArr})'
+      style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;transition:background .15s"
+      onmouseover="this.style.background='var(--sf)'" onmouseout="this.style.background='transparent'">
+      <div>
+        <div style="font-size:.82rem;font-weight:500">${f.food}</div>
+        <div style="font-size:.68rem;color:${c};font-family:'Syne',sans-serif;font-weight:700">${f.food_group}</div>
+      </div>
+      <span style="font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;color:var(--ac)">+ Add</span>
+    </div>`;
+  }).join('');
+}
+
+function addExtra(name,group,aaArr){
+  if(extraFoods[name]) return;
+  const aa={};AAS.forEach((a,i)=>aa[a]=aaArr[i]);
+  extraFoods[name]={n:name,g:group,aa};
+  renderExtraChips();
+  document.getElementById('c-search').value='';
+  document.getElementById('c-results').style.display='none';
+}
+
+function removeExtra(name){
+  delete extraFoods[name];
+  renderExtraChips();
+}
+
+function renderExtraChips(){
+  const keys=Object.keys(extraFoods);
+  const wrap=document.getElementById('extras-wrap');
+  wrap.style.display=keys.length?'block':'none';
+  document.getElementById('extra-count').textContent=keys.length?`(${keys.length})`:'';
+  document.getElementById('extra-chips').innerHTML=keys.map((name,idx)=>{
+    const f=extraFoods[name];const c=GC[f.g]||'#4ade80';
+    return`<div style="display:flex;align-items:center;gap:6px;background:var(--sf2);border:1px solid ${c}44;border-radius:8px;padding:5px 10px">
+      <span style="font-size:.75rem;font-weight:500">${name}</span>
+      <span style="font-size:.65rem;color:${c};font-family:'Syne',sans-serif;font-weight:700">${f.g}</span>
+      <span class="rm-btn" data-idx="${idx}" style="cursor:pointer;color:var(--mt);font-size:.9rem;margin-left:4px;font-weight:700;line-height:1" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='var(--mt)'">✕</span>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.rm-btn').forEach(btn=>{
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      const name=Object.keys(extraFoods)[parseInt(this.dataset.idx)];
+      if(name!==undefined) removeExtra(name);
+    });
+  });
+}
+
+// CALCULATE
+async function calcConsumer(){
+  const defaultSel=[...selF].map(i=>({name:CF[i].n,group:CF[i].g,aa:CF[i].aa}));
+  const extraSel=Object.values(extraFoods).map(f=>({name:f.n,group:f.g,aa:f.aa}));
+  const foods=[...defaultSel,...extraSel];
+  if(foods.length<2){alert('Select at least 2 ingredients.');return}
+
+  // get current target info
+  const activeInp=document.getElementById('qty-'+activeTarget);
+  const qty=parseFloat(activeInp?.value)||1;
+  selT=calcBlendGrams(activeTarget,qty);
+  const proteinG=calcProteinG(activeTarget,qty);
+  const srcLabels={
+    egg:`${qty} egg${qty>1?'s':''}`,
+    beef:`${qty}g beef`,
+    chicken:`${qty}g chicken breast`,
+    tuna:`${qty} tuna can${qty>1?'s':''}`,
+    milk:`${qty} cup${qty>1?'s':''} of milk`
+  };
+  const currentLabel = srcLabels[activeTarget] || '';
+
+  const btn=document.getElementById('cbtn');
+  btn.innerHTML='<span class="spin"></span> Optimizing...';btn.disabled=true;
+  try{
+    const r=await fetch(`${API}/predict_custom`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({foods,total_grams:selT})});
+    const d=await r.json();
+    document.getElementById('rt').textContent=`Optimal Blend matching ${currentLabel} (${proteinG}g protein · ${selT}g total)`;
+    document.getElementById('ri').innerHTML=`
+      <table class="mix-table" style="margin-bottom:0">
+        <thead><tr><th>Food</th><th>Group</th><th>% in Mixture</th><th>Grams</th></tr></thead>
+        <tbody>${d.weights.map(w=>{const c=GC[w.group]||'#4ade80';
+          return`<tr><td>${w.food}</td><td style="color:${c}">${w.group}</td>
+            <td><span class="pct-v">${w.percentage}%</span></td>
+            <td class="g-v">${w.grams}g</td></tr>`;
+        }).join('')}</tbody>
+      </table>`;
+    document.getElementById('rs').textContent=`${d.egg_similarity}%`;
+    // store for recipe generation
+    lastBlendData = d;
+    lastBlendData.protein_grams = proteinG;
+    lastBlendData.target_label = currentLabel;
+    // reset recipe panel
+    const recipeResult = document.getElementById('recipe-result');
+    const recipeCard = document.getElementById('recipe-card');
+    const recipeLoading = document.getElementById('recipe-loading');
+    if(recipeResult) recipeResult.style.display='none';
+    if(recipeCard) recipeCard.style.display='none';
+    if(recipeLoading) recipeLoading.style.display='none';
+    const recipeBtn = document.getElementById('recipe-btn');
+    if(recipeBtn){ recipeBtn.innerHTML='✨ Generate Recipe'; recipeBtn.disabled=false; }
+    const cr=document.getElementById('cr');cr.classList.add('show');cr.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch{alert('Server error — make sure app.py is running.');}
+  btn.innerHTML='Calculate Optimal Blend →';btn.disabled=false;
+}
+
+function showOffline(){
+  const msg='<div style="color:var(--dm);font-size:.85rem;padding:16px 0">Run <code>python app.py</code> to load live data.</div>';
+  ['mg','panels','fg','fi'].forEach(id=>document.getElementById(id).innerHTML=msg);
+  document.getElementById('h-foods').textContent='—';
+  document.getElementById('h-r2').textContent='—';
+}
+
+// BLENDS RENDER
+function renderBlends(blends){
+  window._blends=blends;
+  const mk=Object.keys(blends);
+  document.getElementById('tabs').innerHTML=mk.map((k,i)=>`<button class="tab${i===0?' active':''}" onclick="sw('${k}',this)">${blends[k].tag}</button>`).join('');
+  document.getElementById('panels').innerHTML=mk.map((k,i)=>{
+    const m=blends[k];
+    const trows=m.foods.map(f=>{const c=GC[f.category]||'#4ade80';
+      return`<tr><td>${f.food}</td><td style="color:${c}">${f.category}</td>
+        <td><span class="pct-v">${f.percentage}%</span><span class="pct-bar-wrap"><span class="pct-bar" style="width:${f.percentage}%;background:${c}"></span></span></td>
+        <td class="g-v">${f.grams}g</td><td><span class="pbadge">${f.protein_content}g prot</span></td></tr>`;
+    }).join('');
+    const arows=AAS.map(aa=>{const c=m.aa_comparison?.[aa];if(!c)return'';
+      const bw=Math.min(c.ratio_pct,100);
+      return`<tr><td>${aa}</td><td>${c.blend_per100g_protein}</td><td>${c.egg_per100g_protein}</td>
+        <td><div class="rb"><div class="rf" style="width:${bw}px"></div><span class="rp ${c.ratio_pct>=80?'good':'low'}">${c.ratio_pct}%</span></div></td></tr>`;
+    }).join('');
+    return`<div class="panel${i===0?' active':''}" id="p-${k}">
+      <div class="card">
+        <div class="mh"><div><div class="mname">${m.name}</div><div class="mdesc">${m.description}</div></div>
+          <div class="sr" style="border-color:${m.color}"><div class="sv2" style="color:${m.color}">${m.egg_similarity}%</div><div class="st">Egg Match</div></div>
+        </div>
+        <table class="mix-table"><thead><tr><th>Food</th><th>Category</th><th>% in Mixture</th><th>Grams</th><th>Protein/100g</th></tr></thead><tbody>${trows}</tbody></table>
+        <div class="uses" id="uses-${k}">${(m.uses||[]).map((u,i)=>`<div class="chip" onclick="selectUse('${k}',${i})" id="use-${k}-${i}" style="cursor:pointer">📦 ${u.label}</div>`).join('')}</div>
+        <button id="howto-btn-${k}" onclick="showHowTo('${k}')" style="margin-top:14px;background:var(--ac);color:#fff;border:none;padding:10px 20px;border-radius:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;width:100%;transition:background .15s">🔧 How to Make: ${m.uses[0]?.label||''} →</button>
+      </div>
+      <div class="card">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;margin-bottom:10px">AA Profile vs Egg (g / 100g protein)</div>
+        <div style="position:relative;height:210px"><canvas id="r-${k}"></canvas></div>
+        <div style="display:flex;gap:14px;margin-top:8px;font-size:.72rem;color:var(--dm)">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:${m.color};display:inline-block"></span>${m.name}</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:#f43f5e;display:inline-block"></span>Egg Reference</span>
+        </div>
+        <table class="aat"><thead><tr><th>Amino Acid</th><th>Blend</th><th>Egg</th><th>Match</th></tr></thead><tbody>${arows}</tbody></table>
+        <div class="unit-note">* g per 100g protein — as per proposal specification (p.4)</div>
+      </div>
+    </div>`;
+  }).join('');
+  requestAnimationFrame(()=>setTimeout(()=>initR(mk[0]),80));
+}
+
+function initR(k){
+  const bl=window._blends;if(!bl)return;
+  const m=bl[k];if(!m)return;
+  const canvas=document.getElementById('r-'+k);
+  if(!canvas)return;
+  // destroy old chart if exists
+  if(rc[k]){rc[k].destroy();rc[k]=null;}
+  const ctx=canvas.getContext('2d');
+  rc[k]=new Chart(ctx,{
+    type:'radar',
+    data:{
+      labels:AAS.map(a=>a.substr(0,4)),
+      datasets:[
+        {data:AAS.map(a=>m.mix_profile[a]||0),borderColor:m.color+'cc',backgroundColor:m.color+'18',pointBackgroundColor:m.color,borderWidth:2,pointRadius:3},
+        {data:AAS.map(a=>EGG[a]),borderColor:'#f43f5ecc',backgroundColor:'#f43f5e0c',pointBackgroundColor:'#f43f5e',borderWidth:1.5,pointRadius:2,borderDash:[4,3]}
+      ]
+    },
+    options:{
+      animation:{duration:400},
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{r:{
+        grid:{color:'rgba(0,0,0,.08)'},
+        angleLines:{color:'rgba(0,0,0,.06)'},
+        ticks:{display:false},
+        pointLabels:{color:'#334155',font:{size:8,family:'Syne'}}
+      }}
+    }
+  });
+}
+
+function sw(k,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('p-'+k)?.classList.add('active');
+  // small delay to let DOM render before drawing chart
+  requestAnimationFrame(()=>setTimeout(()=>initR(k),50));
+}
+
+window.addEventListener('load',()=>{
+  new Chart(document.getElementById('wc').getContext('2d'),{type:'bar',
+    data:{labels:AAS,datasets:[{data:AAS.map(a=>WHO[a]),backgroundColor:'rgba(30,58,138,.15)',borderColor:'rgba(30,58,138,.6)',borderWidth:1,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#334155',font:{size:8},maxRotation:30}},
+              y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#334155',font:{size:9}}}}}});
+  document.getElementById('search-input').addEventListener('input', filterFoods);
+  document.getElementById('cat-filter').addEventListener('change', filterFoods);
+});
+
+checkServer();
+setInterval(checkServer,30000);
+</script>
+</body>
+</html>
